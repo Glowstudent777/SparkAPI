@@ -1,8 +1,8 @@
 package org.example;
 
 import org.eclipse.jetty.http.HttpStatus;
+import org.example.auth.AuthController;
 import spark.Spark;
-
 import static spark.Spark.*;
 
 public class Main {
@@ -16,7 +16,8 @@ public class Main {
         });
 
         path("/api", () -> {
-            get("", (req, res) -> HttpStatus.OK_200);
+            before("/*", new AuthController.HandleAuthentication());
+            get("/abc", (req, res) -> HttpStatus.OK_200);
         });
     }
 }
